@@ -1,0 +1,42 @@
+server:
+  port: ${ORCHESTRATOR_PORT:8081}
+
+spring:
+  application:
+    name: itee-orchestrator
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5433}/${POSTGRES_DB:itee}
+    username: ${POSTGRES_USER:itee}
+    password: ${POSTGRES_PASSWORD:itee}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: itee-orchestrator
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      missing-topics-fatal: false
+
+itee:
+  topics:
+    raw-exceptions: raw-trade-exceptions
+    resolved: resolved-trades
+  ai:
+    base-url: ${AI_ENGINE_BASE_URL:http://localhost:8000}
+    api-key: ${AI_ENGINE_API_KEY:}
+
+logging:
+  level:
+    com.itee: INFO
+    org.springframework.kafka: INFO

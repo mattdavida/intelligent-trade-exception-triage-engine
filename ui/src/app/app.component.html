@@ -1,0 +1,158 @@
+<div class="desk">
+  <header class="top">
+    <div class="brand">
+      <p class="brand-mark">ITETE</p>
+      <div>
+        <h1>Exception Triage Desk</h1>
+        <p class="sub">Human-in-the-loop · Java owns state · AI proposes</p>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <span class="pill" [class]="'pill-' + desk.deskState()">{{ statusLabel() }}</span>
+      <span class="meta">Queue {{ desk.queue().length }}</span>
+      <button type="button" class="ghost" (click)="refresh()">Refresh</button>
+      <button type="button" class="ghost" (click)="reconnect()">Reconnect</button>
+    </div>
+  </header>
+
+  @if (desk.lastError() || desk.streamError()) {
+    <div class="banner">
+      {{ desk.lastError() || desk.streamError() }}
+    </div>
+  }
+
+  <main class="layout">
+    <section class="queue-panel">
+      <div class="panel-head">
+        <h2>Active queue</h2>
+        @if (desk.loading()) {
+          <span class="meta">Loading…</span>
+        }
+      </div>
+
+      @if (desk.deskState() !== 'live') {
+        <div class="empty">{{ emptyMessage() }}</div>
+      }
+
+      <ag-grid-angular
+        class="ag-theme-quartz grid"
+        [rowData]="desk.queue()"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        [rowSelection]="'single'"
+        [animateRows]="true"
+        [getRowId]="getRowId"
+        [rowClassRules]="rowClassRules"
+        (gridReady)="onGridReady($event)"
+        (rowClicked)="onRowClicked($event)"
+        (rowSelected)="onRowSelected($event)"
+      />
+    </section>
+
+    <section class="detail-panel">
+      @if (desk.selected(); as ex) {
+        <div class="panel-head">
+          <h2>{{ ex.tradeId }}</h2>
+          <span class="meta">{{ ex.status }}</span>
+        </div>
+
+        <div class="detail-scroll">
+          <div class="block">
+            <h3>Trade facts</h3>
+            <dl class="facts">
+              <div><dt>Counterparty</dt><dd>{{ ex.counterparty }}</dd></div>
+              <div><dt>Type</dt><dd>{{ ex.discrepancyType }}</dd></div>
+              <div><dt>Instrument</dt><dd>{{ ex.instrument }}</dd></div>
+              <div><dt>Side</dt><dd>{{ ex.side }}</dd></div>
+              <div>
+                <dt>Amount</dt>
+                <dd>{{ ex.amount | currency: ex.currency : 'symbol-narrow' : '1.0-2' }}</dd>
+              </div>
+              <div>
+                <dt>Detected</dt>
+                <dd>{{ ex.detectedAt | date: 'medium' }}</dd>
+              </div>
+            </dl>
+            <p class="raw">{{ ex.rawDetails }}</p>
+          </div>
+
+          <div class="block">
+            <h3>AI proposal</h3>
+            @switch (aiPanelState()) {
+              @case ('ready') {
+                <p class="sev" [attr.data-sev]="ex.severity">Severity {{ ex.severity }}</p>
+                <p class="rec">{{ ex.recommendation }}</p>
+                <p class="reason">{{ ex.reasoning }}</p>
+              }
+              @case ('failed') {
+                <p class="fail">AI analysis failed. Reject or Override with a manual recommendation — Approve is disabled until analysis succeeds.</p>
+              }
+              @case ('pending') {
+                <p class="meta">Waiting for AI analysis… (status {{ ex.status }})</p>
+              }
+              @default {
+                <p class="meta">No AI proposal for this status.</p>
+              }
+            }
+          </div>
+
+          <div class="block">
+            <h3>Confidence (Java rubric {{ ex.confidenceRubricVersion || '—' }})</h3>
+            @if (ex.confidenceScore != null) {
+              <p class="score">{{ ex.confidenceScore | number: '1.2-4' }}</p>
+              <ul class="factors">
+                @for (f of ex.confidenceFactors || []; track f.code) {
+                  <li [class.fired]="f.fired">
+                    <span>{{ f.code }}</span>
+                    <span>{{ f.weight > 0 ? '+' : '' }}{{ f.weight }} · {{ f.fired ? 'fired' : 'no' }}</span>
+                  </li>
+                }
+              </ul>
+            } @else if (ex.status === 'ANALYZING_FAILED') {
+              <p class="fail">No score — analysis did not complete. Confidence is computed only after a successful AI response.</p>
+            } @else {
+              <p class="meta">Score pending until analysis completes.</p>
+            }
+          </div>
+
+          <div class="block actions">
+            <h3>HITL actions</h3>
+            <p class="meta hint">
+              Approve removes the item only after a successful AI proposal.
+              Reject / Override also clear the active queue (terminal status).
+            </p>
+            <label class="notes">
+              Notes
+              <input type="text" [ngModel]="notes()" (ngModelChange)="notes.set($event)" placeholder="Optional audit note" />
+            </label>
+
+            <div class="btn-row">
+              <button type="button" class="primary" [disabled]="!canApprove() || desk.actionBusy()" (click)="approve()">
+                Approve AI
+              </button>
+              <button type="button" class="danger" [disabled]="!canRejectOrOverride() || desk.actionBusy()" (click)="reject()">
+                Reject
+              </button>
+              <button type="button" class="ghost" [disabled]="!canRejectOrOverride() || desk.actionBusy()" (click)="openOverride()">
+                Override
+              </button>
+            </div>
+
+            @if (showOverride()) {
+              <label class="notes">
+                Override recommendation
+                <textarea rows="3" [ngModel]="overrideText()" (ngModelChange)="overrideText.set($event)"></textarea>
+              </label>
+              <button type="button" class="primary" [disabled]="!overrideText().trim() || desk.actionBusy()" (click)="submitOverride()">
+                Submit override
+              </button>
+            }
+          </div>
+        </div>
+      } @else {
+        <div class="empty tall">Select an exception from the queue.</div>
+      }
+    </section>
+  </main>
+</div>

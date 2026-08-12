@@ -1,0 +1,13 @@
+[
+  {
+    "tradeId": "TRD-PHASE3-3",
+    "counterparty": "ACME-BANK",
+    "discrepancyType": "SSI_MISMATCH",
+    "instrument": "ZN",
+    "amount": 2500000.00,
+    "currency": "USD",
+    "side": "SELL",
+    "detectedAt": "2026-08-12T14:30:00Z",
+    "rawDetails": "Phase 3 smoke — settlement account on affirm differs from SSI master"
+  }
+]

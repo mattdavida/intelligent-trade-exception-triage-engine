@@ -1,0 +1,90 @@
+[
+  {
+    "tradeId": "TRD-10042",
+    "counterparty": "ACME-BANK",
+    "discrepancyType": "SSI_MISMATCH",
+    "instrument": "ZN",
+    "amount": 2500000.00,
+    "currency": "USD",
+    "side": "SELL",
+    "detectedAt": "2026-08-12T13:00:00Z",
+    "rawDetails": "Settlement account on affirm differs from SSI master"
+  },
+  {
+    "tradeId": "TRD-10043",
+    "counterparty": "NORTH-CLEARING",
+    "discrepancyType": "QUANTITY_BREAK",
+    "instrument": "ES",
+    "amount": 480000.00,
+    "currency": "USD",
+    "side": "BUY",
+    "detectedAt": "2026-08-12T13:02:15Z",
+    "rawDetails": "Affirm qty 100; FOMS qty 110"
+  },
+  {
+    "tradeId": "TRD-10044",
+    "counterparty": "PACIFIC-BROKER",
+    "discrepancyType": "PRICE_TOLERANCE",
+    "instrument": "CL",
+    "amount": 1250000.00,
+    "currency": "USD",
+    "side": "BUY",
+    "detectedAt": "2026-08-12T13:05:40Z",
+    "rawDetails": "Fill 78.42 vs limit band 78.10-78.30"
+  },
+  {
+    "tradeId": "TRD-10045",
+    "counterparty": "EURO-DESK",
+    "discrepancyType": "LATE_CONFIRMATION",
+    "instrument": "ZB",
+    "amount": 5000000.00,
+    "currency": "USD",
+    "side": "SELL",
+    "detectedAt": "2026-08-12T13:10:00Z",
+    "rawDetails": "No affirm within 30m of execution"
+  },
+  {
+    "tradeId": "TRD-10046",
+    "counterparty": "LATAM-PRIME",
+    "discrepancyType": "MISSING_LEI",
+    "instrument": "ZN",
+    "amount": 750000.00,
+    "currency": "USD",
+    "side": "BUY",
+    "detectedAt": "2026-08-12T13:12:22Z",
+    "rawDetails": "Counterparty LEI blank on incoming confirm"
+  },
+  {
+    "tradeId": "TRD-10047",
+    "counterparty": "ACME-BANK",
+    "discrepancyType": "CURRENCY_MISMATCH",
+    "instrument": "ZF",
+    "amount": 900000.00,
+    "currency": "EUR",
+    "side": "SELL",
+    "detectedAt": "2026-08-12T13:15:01Z",
+    "rawDetails": "Trade booked USD; affirm shows EUR"
+  },
+  {
+    "tradeId": "TRD-10048",
+    "counterparty": "NORTH-CLEARING",
+    "discrepancyType": "DUPLICATE_TRADE",
+    "instrument": "NQ",
+    "amount": 320000.00,
+    "currency": "USD",
+    "side": "BUY",
+    "detectedAt": "2026-08-12T13:18:33Z",
+    "rawDetails": "Same tradeId hash seen twice within 5s window"
+  },
+  {
+    "tradeId": "TRD-10049",
+    "counterparty": "UNKNOWN-DESK-99",
+    "discrepancyType": "UNKNOWN_COUNTERPARTY",
+    "instrument": "ZN",
+    "amount": 1500000.00,
+    "currency": "USD",
+    "side": "SELL",
+    "detectedAt": "2026-08-12T13:20:00Z",
+    "rawDetails": "Counterparty code not present on SSI master"
+  }
+]
