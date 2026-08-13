@@ -97,7 +97,7 @@ See [confidence-rubric-v1.md](./confidence-rubric-v1.md).
 
 | Method | Path | Purpose |
 |---|---|---|
-| `GET` | `/api/health` | Liveness |
+| `GET` | `/api/health` | Aggregate readiness: `status` is `UP` / `DEGRADED` / `DOWN` from `db` + `aiEngine` |
 | `GET` | `/api/exceptions` | List (filter by status) |
 | `GET` | `/api/exceptions/{id}` | Detail + AI fields + confidence |
 | `POST` | `/api/exceptions/{id}/resolve` | HITL action |

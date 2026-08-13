@@ -1,8 +1,7 @@
 # ITETE — Architecture & Design Decisions
 
-> **Status:** POC complete (Pre-0 through Phase 5). See [README.md](../README.md) for cold start and [DEMO.md](../DEMO.md) for the walkthrough.  
-> **Design philosophy:** Complexity at the seams is intentional. The architecture keeps a hard boundary between probabilistic AI (severity / recommendation text) and deterministic Java (lifecycle state + auditable confidence), with a human as the only path to a terminal disposition.  
-> **Note:** Design decisions for the shipped system — not a phase tracker. Build history lives in [plan.md](../plan.md).
+> **Status:** POC complete. See [README.md](../README.md) for cold start and [DEMO.md](../DEMO.md) for the walkthrough.  
+> **Design philosophy:** Complexity at the seams is intentional. The architecture keeps a hard boundary between probabilistic AI (severity / recommendation text) and deterministic Java (lifecycle state + auditable confidence), with a human as the only path to a terminal disposition.
 
 ---
 
@@ -161,4 +160,3 @@ Complete when all of the following are true end-to-end:
 | [contracts.md](./contracts.md) | Kafka + REST + AI payloads |
 | [confidence-rubric-v1.md](./confidence-rubric-v1.md) | Factor weights and allow-lists |
 | [known-gaps.md](./known-gaps.md) | Honest POC limits |
-| [../plan.md](../plan.md) | Phased build checklist |

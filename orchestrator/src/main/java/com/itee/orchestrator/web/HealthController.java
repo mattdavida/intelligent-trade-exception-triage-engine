@@ -23,10 +23,22 @@ public class HealthController {
 
     @GetMapping("/api/health")
     public Map<String, Object> health() {
+        boolean db = dbUp();
+        boolean ai = aiEngineClient.healthCheck();
+
+        String status;
+        if (db && ai) {
+            status = "UP";
+        } else if (db || ai) {
+            status = "DEGRADED";
+        } else {
+            status = "DOWN";
+        }
+
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("status", "UP");
-        body.put("db", dbUp() ? "UP" : "DOWN");
-        body.put("aiEngine", aiEngineClient.healthCheck() ? "UP" : "DOWN");
+        body.put("status", status);
+        body.put("db", db ? "UP" : "DOWN");
+        body.put("aiEngine", ai ? "UP" : "DOWN");
         return body;
     }
 

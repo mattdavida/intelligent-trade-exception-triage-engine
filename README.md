@@ -121,7 +121,6 @@ DEMO.md                Guided tour
 | [docs/contracts.md](./docs/contracts.md) | Kafka + REST + AI payloads |
 | [docs/confidence-rubric-v1.md](./docs/confidence-rubric-v1.md) | Factor weights |
 | [docs/known-gaps.md](./docs/known-gaps.md) | POC scope and known limits |
-| [plan.md](./plan.md) | Phased build checklist |
 
 ## Environment
 
