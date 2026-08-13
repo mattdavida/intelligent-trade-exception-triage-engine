@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# Smoke Phase 3: list PENDING_REVIEW, show confidence, resolve one APPROVE.
+# Smoke: list PENDING_REVIEW, show confidence, resolve one APPROVE.
 . (Join-Path $PSScriptRoot '..\lib\common.ps1')
 $root = Get-IteeRepoRoot
 Set-Location $root
@@ -20,7 +20,7 @@ Write-Host "Sample: $($one.tradeId) severity=$($one.severity) confidence=$($one.
 $one.confidenceFactors | ConvertTo-Json -Depth 4
 
 Write-Host "`nPOST /api/exceptions/$($one.id)/resolve APPROVE" -ForegroundColor Cyan
-$body = @{ action = 'APPROVE'; notes = 'Phase 3 smoke approve' } | ConvertTo-Json
+$body = @{ action = 'APPROVE'; notes = 'Smoke resolve approve' } | ConvertTo-Json
 $resolved = Invoke-RestMethod `
     -Method Post `
     -Uri "http://localhost:8081/api/exceptions/$($one.id)/resolve" `
@@ -33,4 +33,4 @@ if ($resolved.status -ne 'RESOLVED') {
     exit 1
 }
 
-Write-Host "Phase 3 smoke OK" -ForegroundColor Green
+Write-Host "Resolve smoke OK" -ForegroundColor Green

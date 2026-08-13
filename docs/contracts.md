@@ -1,6 +1,6 @@
 # ITETE contracts
 
-Frozen for Phase 0. Implementations must match these shapes.
+Canonical payload and API shapes for this POC. Implementations in this repo match these contracts.
 
 ## Topics
 

@@ -88,7 +88,7 @@ Useful flags:
 .\scripts\services\start-ui.ps1
 
 .\scripts\smoke\smoke-ai-engine.ps1
-.\scripts\smoke\smoke-phase3.ps1
+.\scripts\smoke\smoke-resolve.ps1
 ```
 
 Orchestrator and producer invoke `.\gradlew.bat` (wrapper). First UI start runs `npm install` if `ui/node_modules` is missing.
