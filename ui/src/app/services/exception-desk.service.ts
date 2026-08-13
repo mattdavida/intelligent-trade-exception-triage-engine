@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import {
@@ -8,6 +9,29 @@ import {
 } from '../models/exception.models';
 import { ExceptionApiService } from './exception-api.service';
 import { ExceptionStreamService } from './exception-stream.service';
+
+function apiErrorMessage(err: unknown, fallback: string): string {
+  if (err instanceof HttpErrorResponse) {
+    const body = err.error;
+    if (typeof body === 'string' && body.trim()) {
+      return body.trim();
+    }
+    if (body && typeof body === 'object') {
+      const msg =
+        (body as { message?: unknown }).message ??
+        (body as { detail?: unknown }).detail ??
+        (body as { title?: unknown }).title;
+      if (typeof msg === 'string' && msg.trim()) {
+        return msg.trim();
+      }
+    }
+    if (err.status === 0) {
+      return 'Orchestrator unreachable (:8081)';
+    }
+    return `${fallback} (HTTP ${err.status})`;
+  }
+  return fallback;
+}
 
 @Injectable({ providedIn: 'root' })
 export class ExceptionDeskService {
@@ -73,8 +97,10 @@ export class ExceptionDeskService {
       if (!this.selectedId() && this.queue().length > 0) {
         this.selectedId.set(this.queue()[0].id);
       }
-    } catch {
-      this.lastError.set('Failed to load exceptions from orchestrator :8081');
+    } catch (err) {
+      this.lastError.set(
+        apiErrorMessage(err, 'Failed to load exceptions from orchestrator :8081'),
+      );
     } finally {
       this.loading.set(false);
     }
@@ -100,9 +126,12 @@ export class ExceptionDeskService {
       );
       const next = this.queue().find((e) => e.id !== updated.id);
       this.selectedId.set(next?.id ?? null);
-    } catch {
+    } catch (err) {
       this.lastError.set(
-        'Resolve failed — Approve needs PENDING_REVIEW + AI proposal; Reject/Override allowed on failed AI too.',
+        apiErrorMessage(
+          err,
+          'Resolve failed — Approve needs PENDING_REVIEW + AI proposal; Reject/Override allowed on failed AI too.',
+        ),
       );
     } finally {
       this.actionBusy.set(false);

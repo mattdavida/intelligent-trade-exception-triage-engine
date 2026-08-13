@@ -165,7 +165,7 @@ AZURE_OPENAI_CHAT_DEPLOYMENT=$chatDeployment
 AI_ENGINE_API_KEY=$AiEngineApiKey
 AI_ENGINE_BASE_URL=http://localhost:8000
 
-# ─── Local stack ports (see plan.md) ──────────────────────────────────────────
+# ─── Local stack ports (see README.md) ────────────────────────────────────────
 ORCHESTRATOR_PORT=8081
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5433
